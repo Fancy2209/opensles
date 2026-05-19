@@ -91,7 +91,7 @@ static int audioThread(unsigned int args, void *arg) {
 
 	audio_port = ch;
 	audio_thread_running = 1;
-	int res = sceAudioOutSetConfig(ch, -1, -1, (SceAudioOutMode)-1);
+	int res = sceAudioOutSetConfig(ch, -1, -1, SCE_AUDIO_OUT_MODE_STEREO);
 	if (res < 0) {
 		SL_LOGE("Unable to configure Vita audio port %d: 0x%x", ch, res);
 		goto exit_thread;
