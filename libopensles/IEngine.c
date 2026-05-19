@@ -119,11 +119,44 @@ IObject *players[20] = {};
 int idx = 0;
 #endif
 
+#if 1
+typedef enum
+{
+	VITA_DESCRIPTOR_FILE,
+	VITA_DESCRIPTOR_DIRECTORY,
+	VITA_DESCRIPTOR_SOCKET,
+	VITA_DESCRIPTOR_TTY,
+	VITA_DESCRIPTOR_PIPE
+} DescriptorTypes;
+
+typedef struct
+{
+	int sce_uid;
+	DescriptorTypes type;
+	int ref_count;
+	char* filename;
+	int flags;
+} DescriptorTranslation;
+#endif
+
+extern DescriptorTranslation *__vita_fdmap[];
+
 static SLresult IEngine_CreateAudioPlayer(SLEngineItf self, SLObjectItf *pPlayer,
     SLDataSource *pAudioSrc, SLDataSink *pAudioSnk, SLuint32 numInterfaces,
     const SLInterfaceID *pInterfaceIds, const SLboolean *pInterfaceRequired)
 {
     SL_ENTER_INTERFACE
+
+    #if 1
+    if(pAudioSrc->pLocator->locatorType == SL_DATALOCATOR_ANDROIDFD) {
+        SLDataLocator_AndroidFD* androidFD = (SLDataLocator_AndroidFD*)pAudioSrc->pLocator;
+        const char* path = __vita_fdmap[androidFD->fd]->filename;
+        SLDataLocator_URI       locatorUri;
+        locatorUri.locatorType = SL_DATALOCATOR_URI;
+        locatorUri.URI = (SLchar *) path;
+        pAudioSrc->pLocator = (void*)&locatorUri;
+    }
+    #endif
 
     if (NULL == pPlayer) {
        result = SL_RESULT_PARAMETER_INVALID;
