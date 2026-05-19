@@ -137,9 +137,9 @@ typedef struct
 	char* filename;
 	int flags;
 } DescriptorTranslation;
-#endif
 
 extern DescriptorTranslation *__vita_fdmap[];
+#endif
 
 static SLresult IEngine_CreateAudioPlayer(SLEngineItf self, SLObjectItf *pPlayer,
     SLDataSource *pAudioSrc, SLDataSink *pAudioSnk, SLuint32 numInterfaces,
