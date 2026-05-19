@@ -155,7 +155,7 @@ static SLresult IEngine_CreateAudioPlayer(SLEngineItf self, SLObjectItf *pPlayer
         const char* path = __vita_fdmap[androidFD->fd]->filename;
         locatorUri->locatorType = SL_DATALOCATOR_URI;
         locatorUri->URI = (SLchar *) path;
-        pAudioSrc->pLocator = (void*)&locatorUri;
+        pAudioSrc->pLocator = (void*)locatorUri;
     }
     #endif
 
