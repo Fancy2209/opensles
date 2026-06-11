@@ -87,15 +87,13 @@ static int audioThread(unsigned int args, void *arg) {
 #else
 		return ch;
 #endif
+	} else {
+		SL_LOGI("Opened Vita audio port %d", ch);
 	}
 
 	audio_port = ch;
 	audio_thread_running = 1;
-	int res = sceAudioOutSetConfig(ch, -1, -1, (SceAudioOutMode)-1);
-	if (res < 0) {
-		SL_LOGE("Unable to configure Vita audio port %d: 0x%x", ch, res);
-		goto exit_thread;
-	}
+	int res;
 
 	int vol_stereo[] = {32767, 32767};
 	res = sceAudioOutSetVolume(
@@ -177,10 +175,6 @@ void SDL_close(void)
 {
 	audio_shutdown_requested = 1;
 	slEngine = NULL;
-	if (audio_port >= 0) {
-		sceAudioOutReleasePort(audio_port);
-		audio_port = -1;
-	}
 #ifdef HAVE_PTHREAD
 	if (audio_thread_valid) {
 		pthread_join(audio_thread_handle, NULL);
@@ -193,6 +187,10 @@ void SDL_close(void)
 		audio_thread_handle = -1;
 	}
 #endif
+	if (audio_port >= 0) {
+		sceAudioOutReleasePort(audio_port);
+		audio_port = -1;
+	}
 	audio_thread_running = 0;
 	audio_port = -1;
 	slEngine = NULL;
