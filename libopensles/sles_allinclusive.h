@@ -28,13 +28,7 @@
 #include <errno.h>
 
 #ifndef __cplusplus
-typedef int bool;
-#ifndef false
-#define false 0
-#endif
-#ifndef true
-#define true 1
-#endif
+#include <stdbool.h>
 #endif
 
 // The OpenSLES.h definitions of SL_PROFILES_... have casts, so are unusable by preprocessor
@@ -226,6 +220,7 @@ typedef struct {
 struct SndFile {
     // save URI also?
     SLchar *mPathname;
+    int mFD;
     SNDFILE *mSNDFILE;
     SF_INFO mSfInfo;
     pthread_mutex_t mMutex; // protects mSNDFILE only
