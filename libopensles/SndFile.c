@@ -102,9 +102,9 @@ void audioPlayerRefillBuffers(CAudioPlayer *audioPlayer)
             return;
         }
 
-        object_lock_exclusive(this);
+        pthread_mutex_lock(&this->mMutex);
         if (this->mEOF) {
-            object_unlock_exclusive(this);
+            pthread_mutex_unlock(&this->mMutex);
             return;
         }
 
@@ -114,7 +114,7 @@ void audioPlayerRefillBuffers(CAudioPlayer *audioPlayer)
         }
 
         sf_count_t count = sf_read_short(this->mSNDFILE, pBuffer, (sf_count_t) SndFile_BUFSIZE);
-        object_unlock_exclusive(this);
+        pthread_mutex_unlock(&this->mMutex);
 
         if (0 < count) {
             SLresult result = IBufferQueue_Enqueue(&audioPlayer->mBufferQueue.mItf, pBuffer,
