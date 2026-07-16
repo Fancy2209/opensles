@@ -29,7 +29,7 @@ static void audioThread(void* arg) {
 static int audioThread(unsigned int args, void* arg) {
 #endif
 	int ch = sceAudioOutOpenPort(SCE_AUDIO_OUT_PORT_TYPE_BGM, SndFile_BUFSIZE / 4, &_opensles_user_freq != NULL ? _opensles_user_freq : 44100, SCE_AUDIO_OUT_MODE_STEREO);
-	sceAudioOutSetConfig(ch, -1, -1, (SceAudioOutMode)-1);
+	sceAudioOutSetConfig(ch, SndFile_BUFSIZE / 4, &_opensles_user_freq != NULL ? _opensles_user_freq : 44100, SCE_AUDIO_OUT_MODE_STEREO);
 	
 	int vol_stereo[] = {32767, 32767};
 	sceAudioOutSetVolume(ch, (SceAudioOutChannelFlag)(SCE_AUDIO_VOLUME_FLAG_L_CH | SCE_AUDIO_VOLUME_FLAG_R_CH), vol_stereo);
